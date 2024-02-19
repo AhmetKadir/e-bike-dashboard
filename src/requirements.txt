@@ -1,0 +1,4 @@
+PyQt5==5.15.6
+requests==2.26.0
+pyserial==3.5
+folium==0.15
