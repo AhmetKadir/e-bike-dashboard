@@ -104,8 +104,8 @@ class GpsModule:
             
         return None
     
-    def run_sim808(self):
-        if self.isRealData:
+    def run_sim808(self, useRealData):
+        if useRealData:
             try:
                 # Send AT command
                 # print("AT command sent")
@@ -195,7 +195,7 @@ class GpsModule:
 
 def main():
     gps_instance = GpsModule(isRealData=True)
-    gps_instance.run_sim808()
+    gps_instance.run_sim808(False)
     
 if __name__ == "__main__":
     main()

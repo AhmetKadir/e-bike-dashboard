@@ -3,9 +3,9 @@ from Helper.AnalogGaugeWidget import AnalogGaugeWidget
 from PyQt5.QtGui import QFont, QFontDatabase, QColor
 from PyQt5.QtCore import QTimer, QTime, QDateTime, QTimeZone, QByteArray
 import os
+import sys
 from sim808_reader import GpsModule
 from threading import Thread
-from mapGui import MapWidget
 
 folderPath = os.path.dirname(os.path.abspath(__file__))
 iconPath = folderPath + "//Icons"
@@ -19,6 +19,9 @@ averageSpeedBackgroundIconPath = iconPath + "//blue.png"
 
 companyNameStr = "HIGHTECHMOBI Bisiklet Teknolojileri LTD.ŞTİ."
 brandNameStr = "QuadSmart"
+
+_useMap = False
+_useRealData = False
 
 class Ui_MainWindow(object):
 
@@ -68,20 +71,22 @@ class Ui_MainWindow(object):
         self.background.setScaledContents(True)
         self.background.setObjectName("background")
         
-        self.mapButton = QtWidgets.QPushButton("Map", self.centralwidget)
-        self.mapButton.setGeometry(340, int(self.screenHeight * 0.05), 45, 30) 
-        self.mapButton.setFont(headerFont)
-        self.mapButton.clicked.connect(self.open_map_gui)
+        if _useMap == True:
+            self.mapButton = QtWidgets.QPushButton("Map", self.centralwidget)
+            self.mapButton.setGeometry(340, int(self.screenHeight * 0.05), 45, 30) 
+            self.mapButton.setFont(headerFont)
+            self.mapButton.clicked.connect(self.open_map_gui)
         
-        self.mapWidget = MapWidget(self.centralwidget)
-        self.mapWidget.setGeometry(QtCore.QRect(0, 0, 480, 320))
-        self.mapWidget.setObjectName("mapWidget")
-        self.mapWidget.setHidden(True)
-        
-        self.timer = QtCore.QTimer(MainWindow)
-        self.timer.timeout.connect(self.update_map)
-        self.timer.start(2000)
-        
+            from mapGui import MapWidget            
+            self.mapWidget = MapWidget(self.centralwidget)
+            self.mapWidget.setGeometry(QtCore.QRect(0, 0, 480, 320))
+            self.mapWidget.setObjectName("mapWidget")
+            self.mapWidget.setHidden(True)
+            
+            self.timer = QtCore.QTimer(MainWindow)
+            self.timer.timeout.connect(self.update_map)
+            self.timer.start(2000)
+            
         self.leftSignal = QtWidgets.QLabel(self.centralwidget)
         self.leftSignal.setGeometry(QtCore.QRect(20, 10, 41, 41))
         self.leftSignal.setPixmap(QtGui.QPixmap(directionIconPath))
@@ -118,17 +123,6 @@ class Ui_MainWindow(object):
         self.dateTimeDisplay.setFont(valueFont)
         self.dateTimeDisplay.setObjectName("dateTimeDisplay")
         self.dateTimeDisplay.setStyleSheet("color: white;")
-        
-        available_time_zones = QTimeZone.availableTimeZoneIds()
-
-        # Specify the file path where you want to write the time zone identifiers
-        file_path = 'time_zones.txt'
-
-        # Write the time zone identifiers to the file
-        with open(file_path, 'w') as file:
-            for time_zone_id in available_time_zones:
-                zoneId = str(time_zone_id) + '\n'
-                file.write(zoneId)
         
         # # Create a timer to update the current date and time
         self.timer = QtCore.QTimer(MainWindow)
@@ -404,7 +398,6 @@ class Ui_MainWindow(object):
         turkey_time_zone = QTimeZone(iana_id_bytes)
         current_turkey_datetime = QDateTime(current_utc_datetime)
         current_turkey_datetime.setTimeZone(turkey_time_zone)
-    
 
         # self.dateTimeDisplay.setText(str(QDate.currentDate().toString("d/M/yyyy")) + " " + str(QTime.currentTime().toString("h:mm AP")))
         self.dateTimeDisplay.setText(current_turkey_datetime.toString("d/M/yyyy h:mm AP"))
@@ -497,10 +490,17 @@ def getBatteryLevel(batteryLevel):
 
 def run_gps_module():
     gps_instance = GpsModule()  # Instantiate a new instance of GpsModule
-    gps_instance.run_sim808()
+    gps_instance.run_sim808(_useRealData)
 
 if __name__ == "__main__":
-    import sys
+    if len(sys.argv) != 3:
+        print("Usage: python script.py <arg1> <arg2>")
+        print("arg1: _useRealData, arg2: _useMap")
+        sys.exit(1)
+    
+    _useRealData = sys.argv[1].lower() == 'true'
+    _useMap = sys.argv[2].lower() == 'true'
+    
     app = QtWidgets.QApplication(sys.argv)
     
     gps_thread = Thread(target=run_gps_module)
