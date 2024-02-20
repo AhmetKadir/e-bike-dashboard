@@ -50,25 +50,19 @@ class GpsModule:
     def get_speed(self):
         return self.speed
     
-    def send_gps_data(self, server_url):
+    def send_gps_data(self):
         
-        #  https://rentalmanagementapi-production.up.railway.app/v1/scooters/position
-        
-        # {
-        #     "scooter_id": 1,
-        #     "longitude": 41,
-        #     "latitude": 27,
-        #     "api_key": "AIzaSyA8OZC5Yg2qaxu1B5loyXtNRjlgG8XinnU"
-        # }
+        # api key will be hidden in the future
         
         data = {
+            "scooter_id": "65d387e6d21bfd0012dea1f6",
             "latitude": self.latitude,
             "longitude": self.longitude,
-            "speed": self.speed
+            "api_key": "AIzaSyA8OZC5Yg2qaxu1B5loyXtNRjlgG8XinnU"
         }
         try:
-            response = requests.post(server_url, json=data)
-            if response.status_code == 200:
+            response = requests.put("https://rentalmanagementapi-production.up.railway.app/v1/scooters/position", json=data)
+            if response.status_code == 204:
                 print("GPS data uploaded successfully")
             else:
                 print(f"Failed to upload GPS data. Status Code: {response.status_code}")
@@ -181,8 +175,8 @@ class GpsModule:
             while True:
                 if not self.isDataInitialized:
                     self.isDataInitialized = True
-                    self.latitude = "41.511900"
-                    self.longitude = "26.235400"
+                    self.latitude = "40.808448"
+                    self.longitude = "29.356192"
                     self.speed = "2.20"
                 
                 else:
@@ -190,8 +184,9 @@ class GpsModule:
                     self.latitude = str(float(self.latitude) + 0.001)
                     self.longitude = str(float(self.longitude) - 0.001)
                     self.speed = str(float(self.speed) + 0.2)
+                    self.send_gps_data()
                                     
-                time.sleep(2)       
+                time.sleep(3)       
 
 def main():
     gps_instance = GpsModule(isRealData=True)
