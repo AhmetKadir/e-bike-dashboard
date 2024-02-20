@@ -262,7 +262,7 @@ class Ui_MainWindow(object):
         brandNameFont.setFamily(myFontName)
         brandNameFont.setPointSize(13)
         
-        brandNameTextWidth = 120
+        brandNameTextWidth = 135
         brandNameTextHeight = 35
         
         self.brandName = QtWidgets.QLabel(self.centralwidget)
