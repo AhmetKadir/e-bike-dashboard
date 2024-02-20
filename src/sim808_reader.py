@@ -62,9 +62,7 @@ class GpsModule:
         }
         try:
             response = requests.put("https://rentalmanagementapi-production.up.railway.app/v1/scooters/position", json=data)
-            if response.status_code == 204:
-                print("GPS data uploaded successfully")
-            else:
+            if response.status_code != 204:
                 print(f"Failed to upload GPS data. Status Code: {response.status_code}")
         except Exception as e:
             print(f"Error uploading GPS data: {e}")
