@@ -20,7 +20,7 @@ class MapWidget(QWidget):
         self.web_view_2.hide()
 
         # Create initial map
-        self.map = folium.Map(location=[latitude, longitude], zoom_start=12)
+        self.map = folium.Map(location=[latitude, longitude], zoom_start=15)
         self.marker = folium.Marker([latitude, longitude], popup='Current Location', tooltip='Click for more info')
         self.marker.add_to(self.map)
         self.data = io.BytesIO()
@@ -38,7 +38,7 @@ class MapWidget(QWidget):
         self.web_view_2.show()
         self.web_view_1.hide()
         
-        self.map = folium.Map(location=[_latitude, _longitude], zoom_start=12)
+        self.map = folium.Map(location=[_latitude, _longitude], zoom_start=15)
         self.marker = folium.Marker([_latitude, _longitude], popup='Current Location', tooltip='Click for more info')
         self.marker.add_to(self.map)
         self.data = io.BytesIO()

@@ -1,7 +1,8 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from Helper.AnalogGaugeWidget import AnalogGaugeWidget
 from PyQt5.QtGui import QFont, QFontDatabase, QColor
-from PyQt5.QtCore import QTimer, QTime, QDateTime, QTimeZone, QByteArray
+from PyQt5.QtCore import QTimer, QTime, QDateTime, QTimeZone, QByteArray, Qt
+# from PyQt5.QtWebEngineWidgets import QWebEngineView
 import os
 import sys
 from sim808_reader import GpsModule
@@ -41,15 +42,15 @@ class Ui_MainWindow(object):
 
     
     def setupUi(self, MainWindow):
-        
+    
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(480, 320)
         MainWindow.showFullScreen()
-        # MainWindow.setCursor(Qt.BlankCursor)
+        MainWindow.setCursor(Qt.BlankCursor)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.centralwidget.setMouseTracking(False);
-        
+
         myFontName = "RifficFree-Bold"
         myFontsPath = "//riffic"
         fullFontName =  myFontsPath + "//" + myFontName + ".ttf"
