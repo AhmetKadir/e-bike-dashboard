@@ -29,8 +29,8 @@ class Ui_MainWindow(object):
     batteryLevel = 15
     
     remainingTimeValue = QTime(0, 5, 20) # 5 minutes 20 seconds
-    screenWidth = 480
-    screenHeight = 320
+    screenWidth = 1024
+    screenHeight = 600
     
     isBlinkStarted = False
     isBatteryBlinkStarted = False
@@ -44,7 +44,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
     
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(480, 320)
+        MainWindow.resize(self.screenWidth, self.screenHeight)
         MainWindow.showFullScreen()
         MainWindow.setCursor(Qt.BlankCursor)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -67,7 +67,7 @@ class Ui_MainWindow(object):
         valueFont.setPointSize(18)
         
         self.background = QtWidgets.QLabel(self.centralwidget)
-        self.background.setGeometry(QtCore.QRect(0, 0, 480, 320))
+        self.background.setGeometry(QtCore.QRect(0, 0, self.screenWidth, self.screenHeight))
         self.background.setPixmap(QtGui.QPixmap(backGroundImagePath))
         self.background.setScaledContents(True)
         self.background.setObjectName("background")
@@ -88,8 +88,13 @@ class Ui_MainWindow(object):
             self.timer.timeout.connect(self.update_map)
             self.timer.start(2000)
             
+        leftSignalPositionX = self.screenWidth * 0.05
+        leftSignalPositionY = self.screenHeight * 0.05
+        leftSignalWidth = 41
+        leftSignalHeight = 41
+         
         self.leftSignal = QtWidgets.QLabel(self.centralwidget)
-        self.leftSignal.setGeometry(QtCore.QRect(20, 10, 41, 41))
+        self.leftSignal.setGeometry(QtCore.QRect(int(leftSignalPositionX), int(leftSignalPositionY), leftSignalWidth, leftSignalHeight))
         self.leftSignal.setPixmap(QtGui.QPixmap(directionIconPath))
         self.leftSignal.setScaledContents(True)
         self.leftSignal.setObjectName("leftSignal")
@@ -101,19 +106,26 @@ class Ui_MainWindow(object):
         self.timer.timeout.connect(self.blinkLeftSignalEveryHalfSecond)
         self.timer.start(500)
         
+        rightSignalPositionX = self.screenWidth * 0.90
+        rightSignalPositionY = self.screenHeight * 0.05
+        rightSignalWidth = 41
+        rightSignalHeight = 41
+        
         self.rightSignal = QtWidgets.QLabel(self.centralwidget)
-        self.rightSignal.setGeometry(QtCore.QRect(420, 10, 41, 41))
+        self.rightSignal.setGeometry(QtCore.QRect(int(rightSignalPositionX),
+                                                  int(rightSignalPositionY),
+                                                  rightSignalWidth,
+                                                  rightSignalHeight))
         self.rightSignal.setPixmap(QtGui.QPixmap(directionIconPath))
         self.rightSignal.setScaledContents(True)
         self.rightSignal.setObjectName("rightSignal")
         
-        # blink every half second
         self.timer = QtCore.QTimer(MainWindow)
         self.timer.timeout.connect(self.blinkRightSignalEveryHalfSecond)
         self.timer.start(500)
         
         dateTimeHeight = 35
-        dateTimeWidth = 240
+        dateTimeWidth = 260
         dateTimePositionX = int((self.screenWidth - dateTimeWidth) // 2)
         dateTimePositionY = int(self.screenHeight * 0.80)
 
@@ -135,11 +147,16 @@ class Ui_MainWindow(object):
         self.timer.timeout.connect(self.updateBattery)
         self.timer.start(15000)
         
-        batteryLevelBarPositionX = 20
-        batteryLevelBarPositionY = 20
+        batteryLevelBarWidth = 50
+        batteryLevelHeight = 21
+        batteryLevelBarPositionX = int(self.screenWidth * 0.05)
+        batteryLevelBarPositionY = int(self.screenHeight * 0.2)
         
         self.batteryLevelBar = QtWidgets.QProgressBar(self.centralwidget)
-        self.batteryLevelBar.setGeometry(QtCore.QRect(batteryLevelBarPositionX, batteryLevelBarPositionY + 40, 50, 21))
+        self.batteryLevelBar.setGeometry(QtCore.QRect(batteryLevelBarPositionX,
+                                                      batteryLevelBarPositionY,
+                                                      batteryLevelBarWidth,
+                                                      batteryLevelHeight))
         self.batteryLevelBar.setProperty("value", self.batteryLevel)
         self.batteryLevelBar.setTextVisible(True)
         self.batteryLevelBar.setObjectName("progressBar")
@@ -162,42 +179,67 @@ class Ui_MainWindow(object):
             "}"
         )
         
+        batteryIconWidth = 40
+        batteryIconHeight = 40
+        batteryIconPositionX = int(batteryLevelBarPositionX)
+        batteryIconPositionY = int(batteryLevelBarPositionY) - 40
+        
         self.batteryIcon = QtWidgets.QLabel(self.centralwidget)
-        self.batteryIcon.setGeometry(QtCore.QRect(batteryLevelBarPositionX + 0, 95, 40, 40))
+        self.batteryIcon.setGeometry(QtCore.QRect(batteryIconPositionX,
+                                                    batteryIconPositionY,
+                                                    batteryIconWidth,
+                                                    batteryIconHeight))
         self.batteryIcon.setFont(valueFont)
         self.batteryIcon.setPixmap(QtGui.QPixmap(alertBatteryIconPath))
         self.batteryIcon.setScaledContents(True)
         self.batteryIcon.setObjectName("batteryIcon")
         self.batteryIcon.setHidden(True)
         
-        remainingTimePositionX = batteryLevelBarPositionX + 150
-        remainingTimePositionY = batteryLevelBarPositionY + 40
+        remainingTimeTextWidth = 100
+        remainingTimeTextHeight = 25
+        
+        remainingTimeIconWidth = 41
+        remainingTimeIconHeight = 41
+        remainingTimeIconPositionX = int(self.screenWidth * 0.5 - remainingTimeTextWidth // 2 - 25)
+        remainingTimeIconPositionY = int(self.screenHeight * 0.2)
         
         self.remainingTimeIcon = QtWidgets.QLabel(self.centralwidget)
-        self.remainingTimeIcon.setGeometry(QtCore.QRect(remainingTimePositionX, remainingTimePositionY, 41, 41))
+        self.remainingTimeIcon.setGeometry(QtCore.QRect(remainingTimeIconPositionX,
+                                                        remainingTimeIconPositionY,
+                                                        remainingTimeIconWidth,
+                                                        remainingTimeIconHeight))
         self.remainingTimeIcon.setPixmap(QtGui.QPixmap(clock4IconPath))
         self.remainingTimeIcon.setScaledContents(True)
         self.remainingTimeIcon.setObjectName("remainingTimeIcon")
         self.remainingTimeIcon.setStyleSheet("color: white;")
         
+        remainingTimeTextPositionX = remainingTimeIconPositionX + 50
+        remainingTimeTextPositionY = remainingTimeIconPositionY + 10
+        
         self.remainingTimeText = QtWidgets.QLabel(self.centralwidget)
-        self.remainingTimeText.setGeometry(QtCore.QRect(remainingTimePositionX + 50, remainingTimePositionY + 10, 75, 25))
+        self.remainingTimeText.setGeometry(QtCore.QRect(remainingTimeTextPositionX,
+                                                        remainingTimeTextPositionY,
+                                                        remainingTimeTextWidth,
+                                                        remainingTimeTextHeight))
         self.remainingTimeText.setFont(valueFont)
         self.remainingTimeText.setObjectName("remainingTime")
         self.remainingTimeText.setText(self.remainingTimeValue.toString("mm:ss"))
         self.remainingTimeText.setStyleSheet("color: white;")
         
-        # update remaining time every 1 second
         self.timer = QtCore.QTimer(MainWindow)
         self.timer.timeout.connect(self.updateRemainingTime)
         self.timer.start(1000)
         
-        # add average speed
-        averageSpeedPositionX = remainingTimePositionX - 50
-        averageSpeedPositionY = remainingTimePositionY + 80
+        averageSpeedBackgroundWidth = 90
+        averageSpeedBackgroundHeight = 90
+        averageSpeedPositionX = int(self.screenWidth * 0.4 - averageSpeedBackgroundWidth // 2)
+        averageSpeedPositionY = int(self.screenHeight * 0.5)
         
         self.averageSpeedBackground = QtWidgets.QLabel(self.centralwidget)
-        self.averageSpeedBackground.setGeometry(QtCore.QRect(averageSpeedPositionX, averageSpeedPositionY, 90, 90))
+        self.averageSpeedBackground.setGeometry(QtCore.QRect(averageSpeedPositionX,
+                                                             averageSpeedPositionY,
+                                                             averageSpeedBackgroundWidth,
+                                                             averageSpeedBackgroundHeight))
         self.averageSpeedBackground.setObjectName("averageSpeedBackground")
         self.averageSpeedBackground.setPixmap(QtGui.QPixmap(averageSpeedBackgroundIconPath))
         self.averageSpeedBackground.setScaledContents(True)
@@ -216,12 +258,16 @@ class Ui_MainWindow(object):
         self.averageSpeedText.setFont(valueFont)
         self.averageSpeedText.setStyleSheet("color: white;")
 
-        # add trip distance
-        tripDistancePositionX = averageSpeedPositionX + 100
+        tripDistanceWidth = 90
+        tripDistanceHeight = 90
+        tripDistancePositionX = int(self.screenWidth * 0.6 - tripDistanceWidth // 2)
         tripDistancePositionY = averageSpeedPositionY
         
         self.tripDistanceBackground = QtWidgets.QLabel(self.centralwidget)
-        self.tripDistanceBackground.setGeometry(QtCore.QRect(tripDistancePositionX, tripDistancePositionY, 90, 90))
+        self.tripDistanceBackground.setGeometry(QtCore.QRect(tripDistancePositionX,
+                                                             tripDistancePositionY,
+                                                             tripDistanceWidth,
+                                                             tripDistanceHeight))
         self.tripDistanceBackground.setPixmap(QtGui.QPixmap(averageSpeedBackgroundIconPath))
         self.tripDistanceBackground.setObjectName("tripDistanceBackground")
         self.tripDistanceBackground.setScaledContents(True)
@@ -263,36 +309,55 @@ class Ui_MainWindow(object):
         brandNameFont.setFamily(myFontName)
         brandNameFont.setPointSize(13)
         
-        brandNameTextWidth = 135
+        brandNameTextWidth = 200
         brandNameTextHeight = 35
+        brandNameTextPositionX = int(self.screenWidth * 0.5 - brandNameTextWidth * 0.5)
+        brandNameTextPositionY = int(self.screenHeight * 0.05)
         
         self.brandName = QtWidgets.QLabel(self.centralwidget)
-        self.brandName.setGeometry(QtCore.QRect(int((self.screenWidth - brandNameTextWidth) // 2), int(self.screenHeight * 0.05), brandNameTextWidth, brandNameTextHeight))
+        self.brandName.setGeometry(QtCore.QRect(brandNameTextPositionX,
+                                                brandNameTextPositionY,
+                                                brandNameTextWidth,
+                                                brandNameTextHeight))
         self.brandName.setFont(valueFont)
         self.brandName.setObjectName("brandName")
         self.brandName.setText(brandNameStr)
         self.brandName.setStyleSheet("color: #DDDDDD;")
         
-        led_labels_position_x = 20
-        led_labels_position_y = 150
+        led_labels_width = 40
+        led_labels_height = 20
+        led_labels_position_x = int(self.screenWidth * 0.1)
+        led_labels_position_y = int(self.screenHeight * 0.5)
         
         self.led_label1 = QtWidgets.QLabel(self.centralwidget)
-        self.led_label1.setGeometry(QtCore.QRect(led_labels_position_x, led_labels_position_y, 40, 20))
+        self.led_label1.setGeometry(QtCore.QRect(led_labels_position_x,
+                                                 led_labels_position_y,
+                                                 led_labels_width,
+                                                led_labels_height))
         self.led_label1.setObjectName("led_label1")
         self.led_label1.setStyleSheet("background-color: yellow; border-radius: 10px;")
         
         self.led_label2 = QtWidgets.QLabel(self.centralwidget)
-        self.led_label2.setGeometry(QtCore.QRect(led_labels_position_x, led_labels_position_y + 30, 40, 20))
+        self.led_label2.setGeometry(QtCore.QRect(led_labels_position_x,
+                                                led_labels_position_y + 30,
+                                                led_labels_width,
+                                                led_labels_height))
         self.led_label2.setObjectName("led_label2")
         self.led_label2.setStyleSheet("background-color: yellow; border-radius: 10px;")
         
         self.led_label3 = QtWidgets.QLabel(self.centralwidget)
-        self.led_label3.setGeometry(QtCore.QRect(led_labels_position_x, led_labels_position_y + 60, 40, 20))
+        self.led_label3.setGeometry(QtCore.QRect(led_labels_position_x,
+                                                 led_labels_position_y + 60,
+                                                 led_labels_width,
+                                                 led_labels_height))
         self.led_label3.setObjectName("led_label3")
         self.led_label3.setStyleSheet("background-color: yellow; border-radius: 10px;")
         
         self.led_label4 = QtWidgets.QLabel(self.centralwidget)
-        self.led_label4.setGeometry(QtCore.QRect(led_labels_position_x, led_labels_position_y + 90, 40, 20))
+        self.led_label4.setGeometry(QtCore.QRect(led_labels_position_x,
+                                                 led_labels_position_y + 90,
+                                                 led_labels_width,
+                                                 led_labels_height))
         self.led_label4.setObjectName("led_label4")
         self.led_label4.setStyleSheet("background-color: yellow; border-radius: 10px;")
                 
@@ -324,8 +389,16 @@ class Ui_MainWindow(object):
         self.voltageWidget.setFont(headerFont)
         self.voltageWidget.setStyleSheet("color: white;")
         
+        speedWidgetWidth = 280
+        speedWidgetHeight = 210
+        speedWidgetPositionX = int(self.screenWidth * 0.80) 
+        speedWidgetPositionY = int((self.screenHeight * 0.5)  - speedWidgetHeight // 2)
+        
         self.speedWidget = AnalogGaugeWidget(self.centralwidget)
-        self.speedWidget.setGeometry(QtCore.QRect(300, 60, 282, 210))
+        self.speedWidget.setGeometry(QtCore.QRect(speedWidgetPositionX,
+                                                  speedWidgetPositionY,
+                                                  speedWidgetWidth,
+                                                  speedWidgetHeight))
         self.speedWidget.setObjectName("speedWidget")
         self.speedWidget.setMaxValue(50)
         self.speedWidget.updateValue(1)
