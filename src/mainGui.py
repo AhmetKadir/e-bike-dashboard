@@ -697,6 +697,6 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     
     start_screen = StartScreen()
-    start_screen.show()
+    start_screen.showFullScreen()
     # MainWindow.show()
     sys.exit(app.exec_())
