@@ -637,6 +637,7 @@ class StartScreen(QtWidgets.QWidget):
     
     def initUI(self):
         self.setWindowTitle('Start Screen')
+        self.showFullScreen()
         self.resize(screenWidth, screenHeight)
         self.centralwidget = QtWidgets.QWidget(self)
         self.centralwidget.setObjectName("centralwidget")
@@ -655,6 +656,7 @@ class StartScreen(QtWidgets.QWidget):
         start_button = QtWidgets.QPushButton('Start')
         start_button.setStyleSheet("font-family: Arial; font-size: 20px")
         start_button.clicked.connect(self.start_gui)
+        bike_id_edit.returnPressed.connect(start_button.click)
 
         
         # Add widgets to the grid layout at specific row and column positions
@@ -674,8 +676,10 @@ class StartScreen(QtWidgets.QWidget):
         self.setPalette(p)
 
     def start_gui(self):
-        self.hide()
         MainWindow.showFullScreen()
+        # wait 10 seconds then hide this widget
+        QtCore.QTimer.singleShot(1000, self.close)
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
@@ -697,6 +701,5 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     
     start_screen = StartScreen()
-    start_screen.showFullScreen()
     # MainWindow.show()
     sys.exit(app.exec_())
