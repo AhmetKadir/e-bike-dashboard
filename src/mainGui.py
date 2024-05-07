@@ -2,7 +2,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from Helper.AnalogGaugeWidget import AnalogGaugeWidget
 from PyQt5.QtGui import QFont, QFontDatabase, QColor
 from PyQt5.QtCore import QTimer, QTime, QDateTime, QTimeZone, QByteArray, Qt
-# from PyQt5.QtWebEngineWidgets import QWebEngineView
+from PyQt5.QtWebEngineWidgets import QWebEngineView
 import os
 import sys
 from sim808_reader import GpsModule
@@ -33,9 +33,9 @@ screenHeight = 600
 
 class Ui_MainWindow(object):
 
-    batteryLevel = 15
+    batteryLevel = 50
     
-    remainingTimeValue = QTime(0, 5, 20) # 5 minutes 20 seconds
+    remainingTimeValue = QTime(0, 6, 20) # 5 minutes 20 seconds
     isBlinkStarted = False
     isBatteryBlinkStarted = False
     ledOn = False
@@ -53,10 +53,10 @@ class Ui_MainWindow(object):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(screenWidth, screenHeight)
         # MainWindow.showFullScreen()
-        MainWindow.setCursor(Qt.BlankCursor)
+        # MainWindow.setCursor(Qt.BlankCursor)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.centralwidget.setMouseTracking(False);
+        # self.centralwidget.setMouseTracking(False);
 
         fontId = QFontDatabase.addApplicationFont(fontPath + fullFontName)
         if fontId < 0:
@@ -154,13 +154,22 @@ class Ui_MainWindow(object):
 
     def createMapButton(self, MainWindow):
         self.mapButton = QtWidgets.QPushButton("Map", self.centralwidget)
-        self.mapButton.setGeometry(340, int(screenHeight * 0.05), 45, 30) 
-        self.mapButton.setFont(self.headerFont)
+        self.mapButton.setGeometry(int(screenWidth * 0.75),
+                                   int(screenHeight * 0.05),
+                                      int(screenWidth * 0.1),
+                                        int(screenHeight * 0.1))
+        self.mapButton.setFont(self.valueFont)
         self.mapButton.clicked.connect(self.open_map_gui)
+        
+        # create a widget it returnPressed to mapButton.click
+        returnPressedWidget = QtWidgets.QLineEdit()
+        returnPressedWidget.setGeometry(QtCore.QRect(0, 0, 0, 0))
+        returnPressedWidget.setObjectName("returnPressedWidget")
+        returnPressedWidget.returnPressed.connect(self.mapButton.click)
         
         from mapGui import MapWidget            
         self.mapWidget = MapWidget(self.centralwidget)
-        self.mapWidget.setGeometry(QtCore.QRect(0, 0, 480, 320))
+        self.mapWidget.setGeometry(QtCore.QRect(0, 0, screenWidth, screenHeight))
         self.mapWidget.setObjectName("mapWidget")
         self.mapWidget.setHidden(True)
             
@@ -639,6 +648,7 @@ class StartScreen(QtWidgets.QWidget):
         self.setWindowTitle('Start Screen')
         self.showFullScreen()
         self.resize(screenWidth, screenHeight)
+        self.setCursor(Qt.BlankCursor)
         self.centralwidget = QtWidgets.QWidget(self)
         self.centralwidget.setObjectName("centralwidget")
         
@@ -676,6 +686,8 @@ class StartScreen(QtWidgets.QWidget):
         self.setPalette(p)
 
     def start_gui(self):
+        ui = Ui_MainWindow()
+        ui.setupUi(MainWindow)
         MainWindow.showFullScreen()
         # wait 10 seconds then hide this widget
         QtCore.QTimer.singleShot(1000, self.close)
@@ -697,8 +709,6 @@ if __name__ == "__main__":
     gps_thread.start()
     
     MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
     
     start_screen = StartScreen()
     # MainWindow.show()

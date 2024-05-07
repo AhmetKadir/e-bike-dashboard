@@ -3,6 +3,9 @@ from PyQt5.QtWebEngineWidgets import QWebEngineView
 import folium
 import io
 
+screenWidth = 1024
+screenHeight = 600
+
 class MapWidget(QWidget):
     def __init__(self, parent=None):
         super(MapWidget, self).__init__(parent)
@@ -28,8 +31,8 @@ class MapWidget(QWidget):
         self.web_view_1.setHtml(self.data.getvalue().decode())
 
         # Set the size of the QWebEngineViews
-        self.web_view_1.setFixedSize(480, 320)
-        self.web_view_2.setFixedSize(480, 320)
+        self.web_view_1.setFixedSize(screenWidth, screenHeight)
+        self.web_view_2.setFixedSize(screenWidth, screenHeight)
         
         self.layout.addWidget(self.web_view_1)
         self.layout.addWidget(self.web_view_2)
