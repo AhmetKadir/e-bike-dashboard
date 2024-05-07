@@ -1237,7 +1237,7 @@ class AnalogGaugeWidget(QWidget):
 
         x = text_radius * math.cos(math.radians(angle))
         y = text_radius * math.sin(math.radians(angle))
-        text = [int(x - int(w/2)), int(y - int(h/2)), int(w), int(h), Qt.AlignCenter, text]
+        text = [int(x - int(w)), int(y - int(h/2)), int(w), int(h), Qt.AlignCenter, text]
         painter.drawText(text[0] - 60, text[1] + 30, text[2], text[3], text[4], text[5])
 
 
@@ -1278,7 +1278,7 @@ class AnalogGaugeWidget(QWidget):
 
         x = text_radius * math.cos(math.radians(angle))
         y = text_radius * math.sin(math.radians(angle))
-        text = [int(x + w/2), int(y + h), int(w), int(h), Qt.AlignCenter, text]
+        text = [int(x + w/3), int(y + h * 2), int(w), int(h), Qt.AlignCenter, text]
         painter.drawText(text[0] - 90, int(text[1] + 110), text[2], text[3], text[4], text[5])
 
 

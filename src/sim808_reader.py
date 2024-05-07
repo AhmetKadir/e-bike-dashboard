@@ -182,7 +182,8 @@ class GpsModule:
                     self.latitude = str(float(self.latitude) + 0.001)
                     self.longitude = str(float(self.longitude) - 0.001)
                     self.speed = str(float(self.speed) + 0.2)
-                    self.send_gps_data()
+                    # to send data to the server, uncomment the line below
+                    # self.send_gps_data()
                                     
                 time.sleep(3)       
 
