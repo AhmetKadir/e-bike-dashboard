@@ -649,6 +649,9 @@ class StartScreen(QtWidgets.QWidget):
         self.showFullScreen()
         self.resize(screenWidth, screenHeight)
         self.setCursor(Qt.BlankCursor)
+        self.setMouseTracking(False);
+
+        
         self.centralwidget = QtWidgets.QWidget(self)
         self.centralwidget.setObjectName("centralwidget")
         
@@ -662,6 +665,7 @@ class StartScreen(QtWidgets.QWidget):
         bike_id_edit.setStyleSheet("font-family: Arial; font-size: 20px")
         # set input center
         bike_id_edit.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        bike_id_edit.setMouseTracking(False)
         
         start_button = QtWidgets.QPushButton('Start')
         start_button.setStyleSheet("font-family: Arial; font-size: 20px")
@@ -686,8 +690,6 @@ class StartScreen(QtWidgets.QWidget):
         self.setPalette(p)
 
     def start_gui(self):
-        ui = Ui_MainWindow()
-        ui.setupUi(MainWindow)
         MainWindow.showFullScreen()
         # wait 10 seconds then hide this widget
         QtCore.QTimer.singleShot(1000, self.close)
@@ -709,6 +711,8 @@ if __name__ == "__main__":
     gps_thread.start()
     
     MainWindow = QtWidgets.QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(MainWindow)
     
     start_screen = StartScreen()
     # MainWindow.show()
